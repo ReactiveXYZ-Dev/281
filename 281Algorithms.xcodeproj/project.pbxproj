@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		8C32E6011FDF86E800B4C390 /* tree_algorithms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C32E6001FDF86E800B4C390 /* tree_algorithms.cpp */; };
+		8C5F95041FE4E0A5004AB08D /* dp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C5F95011FE4E0A5004AB08D /* dp.cpp */; };
+		8C5F95051FE4E0A5004AB08D /* bb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C5F95021FE4E0A5004AB08D /* bb.cpp */; };
+		8C5F95061FE4E0A5004AB08D /* binomial_coeff.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8C5F95031FE4E0A5004AB08D /* binomial_coeff.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,6 +29,9 @@
 		4B59D4051FDDD6F8003EEAB4 /* 281Algorithms */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = 281Algorithms; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B59D4081FDDD6F8003EEAB4 /* graph_algorithms.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = graph_algorithms.cpp; sourceTree = "<group>"; };
 		8C32E6001FDF86E800B4C390 /* tree_algorithms.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = tree_algorithms.cpp; sourceTree = "<group>"; };
+		8C5F95011FE4E0A5004AB08D /* dp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dp.cpp; sourceTree = "<group>"; };
+		8C5F95021FE4E0A5004AB08D /* bb.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bb.cpp; sourceTree = "<group>"; };
+		8C5F95031FE4E0A5004AB08D /* binomial_coeff.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = binomial_coeff.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +64,9 @@
 		4B59D4071FDDD6F8003EEAB4 /* 281Algorithms */ = {
 			isa = PBXGroup;
 			children = (
+				8C5F95021FE4E0A5004AB08D /* bb.cpp */,
+				8C5F95031FE4E0A5004AB08D /* binomial_coeff.cpp */,
+				8C5F95011FE4E0A5004AB08D /* dp.cpp */,
 				4B59D4081FDDD6F8003EEAB4 /* graph_algorithms.cpp */,
 				8C32E6001FDF86E800B4C390 /* tree_algorithms.cpp */,
 			);
@@ -121,7 +130,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8C5F95061FE4E0A5004AB08D /* binomial_coeff.cpp in Sources */,
 				8C32E6011FDF86E800B4C390 /* tree_algorithms.cpp in Sources */,
+				8C5F95051FE4E0A5004AB08D /* bb.cpp in Sources */,
+				8C5F95041FE4E0A5004AB08D /* dp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
