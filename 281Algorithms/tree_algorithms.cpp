@@ -9,6 +9,7 @@
 #include <iostream>
 #include <sstream>
 #include <queue>
+#include <cassert>
 
 using namespace std;
 
@@ -27,6 +28,12 @@ public:
         Node* right = nullptr;
     };
     
+    // root node
+    Node* root = nullptr;
+    
+    // get rid of compiler warning
+    AVLTree(){}
+    
     // init a value at root
     explicit AVLTree(int val) {
         this->root = new Node(val);
@@ -39,12 +46,30 @@ public:
     
     // insert a new node
     Node* insert(int val) {
-        return this->_insert_impl(this->root, val);
+        Node* n = this->_insert_impl(this->root, val);
+        ++ this->size;
+        this->root = n;
+        return n;
     }
     
     // delete an node
     Node* remove(int val) {
-        return this->_remove_impl(this->root, val);
+        Node* n = this->_remove_impl(this->root, val);
+        -- this->size;
+        this->root = n;
+        return n;
+    }
+    
+    // clear the contents of this tree
+    void clear() {
+        this->destroy(this->root);
+        this->root = nullptr;
+        this->size = 0;
+    }
+    
+    // get number of elements
+    size_t num_elements() const {
+        return this->size;
     }
     
     // get height
@@ -113,8 +138,8 @@ public:
     }
     
 private:
-    // root node
-    Node* root = nullptr;
+    // size
+    size_t size = 0;
     
     // tree operation implementations
     Node* _find_impl(Node* root, int val) const {
@@ -140,12 +165,77 @@ private:
         } else if (val > node->val) {
             node->right = this->_insert_impl(node->right, val);
         } else {
-            // equal, default to insert right
-            node->right = this->_insert_impl(node->right, val);
+            // @NOTICE: equal, disallow or use other strategies
+            return node;
         }
         
         // update height of the node
         node = this->update_height(node);
+        // check balance
+        return this->check_balance(node);
+    }
+    
+    Node* _remove_impl(Node* node, int val) {
+        
+        if (!node) return node;
+        
+        // search through left/right subtree
+        if (val < node->val) {
+            node->left = this->_remove_impl(node->left, val);
+        }
+        if (val > node->val) {
+            node->right = this->_remove_impl(node->right, val);
+        }
+        // equal, found the node
+        if (val == node->val) {
+            // if node has no children
+            if (!node->left && !node->right) {
+                delete node;
+                node = nullptr;
+            }
+            // two children
+            else if (node->left && node->right) {
+                // find minimum node in the right subtree
+                // or the in-order successor
+                Node* min = node->right;
+                while (min->left != nullptr) {
+                    min = min->left;
+                }
+                // copy over that value
+                node->val = min->val;
+                // now remove the one with the same value in the subtree
+                node->right = this->_remove_impl(node->right, min->val);
+            }
+            // one children
+            else {
+                Node* child;
+                if (node->left == nullptr) {
+                    child = node->right;
+                    node->right = nullptr;
+                } else {
+                    child = node->left;
+                    node->left = nullptr;
+                }
+                // copy over child value
+                node->val = child->val;
+                // destroy child
+                delete child;
+                child = nullptr;
+            }
+        }
+        
+        // if root got deleted
+        if (!node) return node;
+        
+        // update node weight for AVL
+        node = this->update_height(node);
+        
+        // check balance and adjust
+        return this->check_balance(node);
+    }
+    
+    // check balance of a node and adjust
+    Node* check_balance(Node* node) {
         // check balance
         int balance = this->balance(node);
         
@@ -174,12 +264,7 @@ private:
         return node;
     }
     
-    Node* _remove_impl(Node* node, int val) {
-        // TODO
-        return nullptr;
-    }
-    
-    // check balance of node
+    // get balance of node
     int balance(Node* node) const {
         if (!node) {
             return 0;
@@ -216,6 +301,7 @@ private:
     
     // destroy the tree
     void destroy(Node* root) {
+        if (!root) return;
         if (!root->left && !root->right) {
             // leaf
             delete root;
@@ -223,13 +309,64 @@ private:
             return;
         }
         // destroy subtrees
-        destroy(root->left);
-        destroy(root->right);
+        this->destroy(root->left);
+        this->destroy(root->right);
     }
 };
 
+void test_insertion() {
+    AVLTree tree;
+    ostringstream oss;
+
+    // Set 1
+    int set1[] = { 10, 20, 30, 40, 50, 25 };
+    
+    for (int val : set1) {
+        tree.insert(val);
+    }
+    
+    tree.pre_order(tree.root, oss);
+    assert(oss.str() == "30 20 10 25 40 50 ");
+    
+    oss.str("");
+    oss.clear();
+    tree.clear();
+    
+    // Set 2
+    int set2[] = { 9, 5, 10, 0, 6, 11, -1, 1, 2 };
+    
+    for (int val : set2) {
+        tree.insert(val);
+    }
+    
+    tree.pre_order(tree.root, oss);
+    assert(oss.str() == "9 1 0 -1 5 2 6 10 11 ");
+    
+    cout << "Test insertion passed!" << endl;
+}
+
+void test_deletion() {
+    AVLTree tree;
+    ostringstream oss;
+    
+    int set2[] = { 9, 5, 10, 0, 6, 11, -1, 1, 2 };
+    
+    for (int val : set2) {
+        tree.insert(val);
+    }
+    
+    tree.remove(10);
+    
+    tree.pre_order(tree.root, oss);
+    assert(oss.str() == "1 0 -1 9 5 2 6 11 ");
+    
+    cout << "Test deletion passed!" << endl;
+}
 
 int main() {
+    
+    test_insertion();
+    test_deletion();
     
     return 0;
 }
